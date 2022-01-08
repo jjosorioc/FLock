@@ -3,6 +3,7 @@ from distutils.dir_util import copy_tree
 import shutil
 import string
 import random
+from tkinter import Tk, filedialog
 
 
 
@@ -75,10 +76,13 @@ def changeDirName(fullPath: str, folderName: str) -> None:
 
 
 def showWelcomeMessage() -> None:
-    print("You'll have to give an input. This input must be a path.\n" +
-          "If your system is Windows, please delete the C:")
-    path = input("Path: ")
-    startApp(path)
+    # print("You'll have to give an input. This input must be a path.\n" +
+    #       "If your system is Windows, please delete the C:")
+    # path = input("Path: ")
+    root = Tk()
+    root.withdraw()
+    folderPath = filedialog.askdirectory()
+    startApp(folderPath)
 
 
 
