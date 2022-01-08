@@ -12,16 +12,19 @@ def startApp(originalPath: str) -> None:
     Args:
         originalPath (str): Path to directory, it's name won't be changed.
     """
-    os.chdir(originalPath)
-    for dirpath, dirnames, filenames in os.walk(originalPath, topdown=False): # topdown has to be false
+    try:
+        os.chdir(originalPath)
+        for dirpath, dirnames, filenames in os.walk(originalPath, topdown=False): # topdown has to be false
 
-        # New name for the folder or file
-        for file in filenames:
-            
-            changeFileName(os.path.join(dirpath, file), file)
-        for direc in dirnames:
- 
-            changeDirName(dirpath, direc)
+            # New name for the folder or file
+            for file in filenames:
+                
+                changeFileName(os.path.join(dirpath, file), file)
+            for direc in dirnames:
+    
+                changeDirName(dirpath, direc)
+    except IOError:
+        print("ERROR: Can't seem to find the given file.")
         
 
 
@@ -71,7 +74,12 @@ def changeDirName(fullPath: str, folderName: str) -> None:
 
 
 
-MYPATH = "PATH"
+def showWelcomeMessage() -> None:
+    print("You'll have to give an input. This input must be a path.\n" +
+          "If your system is Windows, please delete the C:")
+    path = input("Path: ")
+    startApp(path)
 
 
-startApp(MYPATH)
+
+showWelcomeMessage()
