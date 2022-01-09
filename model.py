@@ -1,5 +1,6 @@
 import os
 from distutils.dir_util import copy_tree
+from pathlib import Path
 import shutil
 import string
 import random
@@ -17,10 +18,10 @@ def startApp(originalPath: str) -> None:
         os.chdir(originalPath)
         for dirpath, dirnames, filenames in os.walk(originalPath, topdown=False): # topdown has to be false
 
-            # New name for the folder or file
+            
             for file in filenames:
                 
-                changeFileName(os.path.join(dirpath, file), file)
+                changeFileName(os.path.join(dirpath, file).replace("\\", "/"), file)
             for direc in dirnames:
     
                 changeDirName(dirpath, direc)
@@ -36,13 +37,16 @@ def changeFileName(fullPath: str, fileName: str) -> None:
         fullPath (str): Directory of the file
         fileName (str): Original name of the file
     """
-    newName = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(150))
+
+    fullPath = Path(fullPath).as_posix()
+    
+    newName = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(100))
 
     try:
         dotIndex = fileName.index(".") # .extension
-
+        
         newPath = fullPath[:fullPath.rindex("/") + 1] + newName + fileName[dotIndex:] # Dir of the renamed file
-
+        
         os.rename(fullPath, newPath)
     except ValueError:
         pass
@@ -57,7 +61,7 @@ def changeDirName(fullPath: str, folderName: str) -> None:
         folderName (str): Original name of the folder
     """
 
-    newDirName = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(150))
+    newDirName = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(100))
 
     pathWithFolderName = fullPath + "/" + folderName # Original path
 
@@ -76,12 +80,11 @@ def changeDirName(fullPath: str, folderName: str) -> None:
 
 
 def showWelcomeMessage() -> None:
-    # print("You'll have to give an input. This input must be a path.\n" +
-    #       "If your system is Windows, please delete the C:")
-    # path = input("Path: ")
+    
     root = Tk()
     root.withdraw()
     folderPath = filedialog.askdirectory()
+    
     startApp(folderPath)
 
 
